@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from basedata.models import Material
 from common import generic
 from django.contrib import admin

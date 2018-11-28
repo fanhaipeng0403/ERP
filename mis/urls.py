@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import basedata.urls
 import invent.urls
 import mis.views

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 
 from django.contrib import messages
 from django.contrib.admin import site

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import basedata.views
 from django.conf.urls import url
 

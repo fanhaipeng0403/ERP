@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 
 from common import const
 from django.contrib.auth.models import User

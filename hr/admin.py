@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # coding = utf-8
 from common import generic
 from django.contrib import admin

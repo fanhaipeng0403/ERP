@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 
 from basedata.models import ValueList, ValueListItem, Address, Partner, BankAccount, Project, Measure, Material, Brand, \
     Category, Warehouse, TechnicalParameterName, TechnicalParameterValue, Trade, ExpenseAccount, Employee, Family, \

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import invent.views
 from django.conf.urls import url
 

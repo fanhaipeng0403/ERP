@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from common import generic
 from django.contrib import admin
 from django.contrib.contenttypes.models import ContentType
