@@ -10,9 +10,9 @@ from django.db import models
 from django.db.models import fields
 from django.db.models.fields import related
 from django.http import HttpRequest, HttpResponse
+from django.utils.encoding import force_text
 from django.utils.encoding import smart_str
 from django.utils.http import urlquote
-from django.utils.encoding import force_text
 from django.utils.translation import ugettext_lazy as _
 
 from common import const
@@ -33,7 +33,7 @@ def update(sql, params=None):
             else:
                 cursor.execute(sql)
         except Exception as e:
-            print( e)
+            print(e)
 
 
 def get_app_model_info_from_request(request):
@@ -125,13 +125,13 @@ class BOAdmin(admin.ModelAdmin):
         show_submit_button = False
         can_restart = False
         can_edit = False
-        #print( app_info
+        # print( app_info
         if app_info:
             try:
                 modal = ContentType.objects.get(app_label='workflow', model='modal')
                 workflow_modal = modal.get_object_for_this_type(app_name=app_info['app'], model_name=app_info['model'])
                 has_workflow_modal = True
-                #print( workflow_modal.code
+                # print( workflow_modal.code
                 instance = ContentType.objects.get(app_label='workflow', model='instance')
                 workflow_instance = instance.get_object_for_this_type(modal=workflow_modal, object_id=app_info['id'])
                 has_workflow_instance = True
@@ -142,7 +142,7 @@ class BOAdmin(admin.ModelAdmin):
                 if x and len(x) > 0:
                     can_edit = x[0].node.can_edit
                 if todo_list.count() > 0:
-                    #print( 'we fount it'
+                    # print( 'we fount it'
                     unread = todo_list.filter(is_read=0)
                     show_workflow_line = True
                     if unread.count() > 0:
@@ -152,7 +152,7 @@ class BOAdmin(admin.ModelAdmin):
                     show_workflow_line = True
 
             except Exception as e:
-               print( e)
+                print(e)
 
         if workflow_modal and not workflow_instance:
             show_submit_button = True
@@ -173,7 +173,7 @@ class BOAdmin(admin.ModelAdmin):
             )
             ctx.update(buttons)
         extra_context.update(ctx)
-        #print( extra_context
+        # print( extra_context
         return super(BOAdmin, self).changeform_view(request, object_id, form_url, extra_context)
 
     def history_view(self, request, object_id, extra_context=None):
@@ -185,7 +185,7 @@ class BOAdmin(admin.ModelAdmin):
         :return:
         """
         app_info = get_app_model_info_from_request(request)
-        #print( app_info
+        # print( app_info
         if app_info:
             try:
                 modal = ContentType.objects.get(app_label='workflow', model='modal')
@@ -210,11 +210,11 @@ class BOAdmin(admin.ModelAdmin):
                     has_history=has_history,
                     todo_list=todo_list,
                 )
-                #print( history_list
+                # print( history_list
                 extra_context.update(ctx)
             except Exception as e:
-               print(e)
-               pass
+                print(e)
+                pass
         return super(BOAdmin, self).history_view(request, object_id, extra_context)
 
     def get_changeform_initial_data(self, request):
@@ -235,19 +235,19 @@ class BOAdmin(admin.ModelAdmin):
                 pass
 
         super(BOAdmin, self).save_model(request, obj, form, change)
-        #print( '=========it is here========='
+        # print( '=========it is here========='
         try:
             code = getattr(obj, 'code')
-            #print( code
+            # print( code
             if code is None or len(code) == 0:
                 fmt = '%s%0' + str(self.CODE_NUMBER_WIDTH) + 'd'
                 code = fmt % (self.CODE_PREFIX, obj.id)
                 table = obj._meta.db_table
                 sql = 'update %s set code = \'%s\' where id=%s' % (table, code, obj.id)
-                print( sql)
+                print(sql)
                 update(sql)
         except Exception as e:
-            print( e)
+            print(e)
 
     # def response_change(self, request, obj):
     # return HttpResponseRedirect('')

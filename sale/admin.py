@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 import datetime
 
+from django.contrib import admin
+
 from basedata.models import BankAccount
 from common import generic
-from django.contrib import admin
 from sale.models import SaleOrder, SaleItem, PaymentCollection, OfferSheet, OfferItem
 
 

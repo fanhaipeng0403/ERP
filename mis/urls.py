@@ -1,11 +1,9 @@
 # -*- coding: utf-8 -*-
-import basedata.urls
-import invent.urls
-import mis.views
-import selfhelp.urls
-import workflow.views
 from django.conf.urls import include, url, static
 from django.contrib import admin
+
+import mis.views
+import workflow.views
 from mis import settings
 
 urlpatterns = [
@@ -13,7 +11,9 @@ urlpatterns = [
     url(r"^admin/(?P<app>\w+)/(?P<model>\w+)/(?P<object_id>\d+)/start", workflow.views.start),
     url(r"^admin/(?P<app>\w+)/(?P<model>\w+)/(?P<object_id>\d+)/approve/(?P<operation>\d+)", workflow.views.approve),
     url(r"^admin/(?P<app>\w+)/(?P<model>\w+)/(?P<object_id>\d+)/restart/(?P<instance>\d+)", workflow.views.restart),
-    url(r'^admin/$', admin.site.urls),
+    # 尾部无/
+    # url(r'^admin/', admin.site.urls),
+    url(r'^admin',  admin.site.urls),
     url(r'^admin/invent/', include('invent.urls')),
     url(r'^admin/basedata/', include('basedata.urls')),
     url(r'^admin/selfhelp/', include('selfhelp.urls')),

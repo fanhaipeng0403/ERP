@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
-from basedata.models import Material
-from common import generic
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
+
+from basedata.models import Material
+from common import generic
 from invent.models import StockIn, StockOut, InitialInventory, InItem, OutItem, InitItem, Inventory, InItemForm, \
     InOutDetail, \
     WareReturn, ReturnItem, WareAdjust, AdjustItem
@@ -99,10 +100,10 @@ class StockInAdmin(generic.BOAdmin):
                                           source=obj.code)
 
     def get_readonly_fields(self, request, obj=None):
-       print( obj)
-       if obj and obj.status == 9:
-           return ['code', 'title', 'po', 'warehouse', 'batch', 'status']
-       else:
+        print(obj)
+        if obj and obj.status == 9:
+            return ['code', 'title', 'po', 'warehouse', 'batch', 'status']
+        else:
             return ['status', 'amount']
 
     def changeform_view(self, request, object_id=None, form_url='', extra_context=None):

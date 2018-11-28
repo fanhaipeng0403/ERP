@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 
 
-
-
-
 class Operation(object):
     APPROVE = 1
     DENY = 3
@@ -28,8 +25,8 @@ class TestAction(WorkflowAction):
     name = 'action.test'
 
     def action(self, request, obj, node_config, operation=Operation.APPROVE):
-       print( 'this is a workflow test action')
-       print( 'request user is %s,current node is %s' % (request.user, node_config))
+        print('this is a workflow test action')
+        print('request user is %s,current node is %s' % (request.user, node_config))
 
 
 class WorkflowActionManager(object):

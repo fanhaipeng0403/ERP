@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-import invent.views
 from django.conf.urls import url
+
+import invent.views
 
 urlpatterns = [
     url(r"stockin/(?P<object_id>\d+)/cin", invent.views.action_in),

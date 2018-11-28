@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 
 
-
-
-
 class NextUserHandler(object):
     """
 
@@ -12,8 +9,6 @@ class NextUserHandler(object):
     description = ''
 
     def handle(self, request, obj, node_config):
-
-
         return None
 
 

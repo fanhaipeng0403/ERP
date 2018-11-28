@@ -30,14 +30,18 @@ DEBUG = True
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 # Application definition
+SITE_ID = 1
 
 INSTALLED_APPS = (
+
+    'django.contrib.sites',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     'syscfg',
     'basedata',
     'organ',
@@ -49,7 +53,7 @@ INSTALLED_APPS = (
     'sale',
 )
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE = (
 
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -125,3 +129,4 @@ STATICFILES_DIRS = (
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'upload')
 MEDIA_URL = '/upload/'
+

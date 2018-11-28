@@ -31,7 +31,7 @@ def action_import(request, object_id):
             messages.error(request, e)
         return HttpResponseRedirect("/admin/basedata/dataimport/%s" % (object_id))
 
-    context = dict( site.each_context(request), title=title, opts=opts, objects_name=objects_name, object=obj, )
+    context = dict(site.each_context(request), title=title, opts=opts, objects_name=objects_name, object=obj, )
     request.current_app = site.name
 
     return TemplateResponse(request, 'admin/invent/stockin/in_confirmation.html', context)

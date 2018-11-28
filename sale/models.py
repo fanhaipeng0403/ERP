@@ -5,15 +5,16 @@ import decimal
 import os
 
 import xlrd
-from basedata.models import Material, Partner, Organization, Measure, BankAccount
-from common import const
-from common import generic
 from django.contrib.auth.models import User
 from django.db import models
 from django.db import transaction
 from django.db.models.aggregates import Sum
 from django.utils.encoding import force_text
 from django.utils.translation import ugettext_lazy as _
+
+from basedata.models import Material, Partner, Organization, Measure, BankAccount
+from common import const
+from common import generic
 from mis import settings
 
 
@@ -30,10 +31,12 @@ class SaleOrder(generic.BO):
     )
     index_weight = 2
     code = models.CharField(_("code"), max_length=const.DB_CHAR_NAME_20, blank=True, null=True)
-    partner = models.ForeignKey(Partner, verbose_name=_("partner"), limit_choices_to={"partner_type": "C"} , on_delete=models.deletion.CASCADE)
+    partner = models.ForeignKey(Partner, verbose_name=_("partner"), limit_choices_to={"partner_type": "C"},
+                                on_delete=models.deletion.CASCADE)
     order_date = models.DateField(_("order date"))
     deliver_date = models.DateField(_("deliver date"))
-    org = models.ForeignKey(Organization, verbose_name=_("organization"), blank=True, null=True , on_delete=models.deletion.CASCADE)
+    org = models.ForeignKey(Organization, verbose_name=_("organization"), blank=True, null=True,
+                            on_delete=models.deletion.CASCADE)
     title = models.CharField(_("title"), max_length=const.DB_CHAR_NAME_40)
     description = models.TextField(_("memo"), blank=True, null=True)
     contact = models.CharField(_("contacts"), max_length=const.DB_CHAR_NAME_20, blank=True, null=True)
@@ -47,7 +50,8 @@ class SaleOrder(generic.BO):
                                  default=0.00)
     discount_amount = models.DecimalField(_("discount amount"), max_digits=12, decimal_places=2, blank=True, null=True,
                                           default=0.00)
-    user = models.ForeignKey(User, verbose_name=_("sales man"), blank=True, null=True , on_delete=models.deletion.CASCADE)
+    user = models.ForeignKey(User, verbose_name=_("sales man"), blank=True, null=True,
+                             on_delete=models.deletion.CASCADE)
     status = models.CharField(_("status"), max_length=const.DB_CHAR_CODE_2, default='0', choices=STATUS)
 
     def __str__(self):
@@ -77,10 +81,11 @@ class SaleItem(models.Model):
     """
     订单明细
     """
-    master = models.ForeignKey(SaleOrder , on_delete=models.deletion.CASCADE)
-    material = models.ForeignKey(Material, verbose_name=_("material"),  on_delete=models.deletion.CASCADE,
+    master = models.ForeignKey(SaleOrder, on_delete=models.deletion.CASCADE)
+    material = models.ForeignKey(Material, verbose_name=_("material"), on_delete=models.deletion.CASCADE,
                                  limit_choices_to={"is_virtual": "0", 'can_sale': '1'}, blank=True, null=True)
-    measure = models.ForeignKey(Measure, verbose_name=_("measure"), blank=True, null=True, on_delete=models.deletion.CASCADE)
+    measure = models.ForeignKey(Measure, verbose_name=_("measure"), blank=True, null=True,
+                                on_delete=models.deletion.CASCADE)
     cnt = models.DecimalField(_("count"), max_digits=14, decimal_places=4)
     stock_price = models.DecimalField(_("stock price"), max_digits=14, decimal_places=4, blank=True, null=True)
     sale_price = models.DecimalField(_("sale price"), max_digits=14, decimal_places=4, blank=True, null=True)
@@ -101,7 +106,7 @@ class SaleItem(models.Model):
         super(SaleItem, self).save(force_insert, force_update, using, update_fields)
         sql = 'update sale_saleorder set amount = (select sum(sale_price*cnt) from sale_saleitem where master_id=%s) where id=%s'
         params = [self.master.id, self.master.id]
-        #print( sql % (self.master.id,self.master.id)
+        # print( sql % (self.master.id,self.master.id)
         generic.update(sql, params)
 
     class Meta:
@@ -115,13 +120,16 @@ class PaymentCollection(generic.BO):
     """
     index_weight = 3
     collection_date = models.DateField(_("collection date"), blank=True, null=True, default=datetime.date.today)
-    org = models.ForeignKey(Organization, verbose_name=_("organization"), blank=True, null=True, on_delete=models.deletion.CASCADE)
+    org = models.ForeignKey(Organization, verbose_name=_("organization"), blank=True, null=True,
+                            on_delete=models.deletion.CASCADE)
     code = models.CharField(_("collection code"), max_length=const.DB_CHAR_NAME_20, blank=True, null=True)
-    so = models.ForeignKey(SaleOrder, verbose_name=_("sale order") ,on_delete=models.deletion.CASCADE)
-    partner = models.ForeignKey(Partner, verbose_name=_("partner"), blank=True, null=True, on_delete=models.deletion.CASCADE)
+    so = models.ForeignKey(SaleOrder, verbose_name=_("sale order"), on_delete=models.deletion.CASCADE)
+    partner = models.ForeignKey(Partner, verbose_name=_("partner"), blank=True, null=True,
+                                on_delete=models.deletion.CASCADE)
     order_amount = models.DecimalField(_("order amount"), max_digits=14, decimal_places=4, blank=True, null=True)
     collection_amount = models.DecimalField(_("collection amount"), max_digits=14, decimal_places=4)
-    bank = models.ForeignKey(BankAccount, verbose_name=_("bank account"), blank=True, null=True, on_delete=models.deletion.CASCADE)
+    bank = models.ForeignKey(BankAccount, verbose_name=_("bank account"), blank=True, null=True,
+                             on_delete=models.deletion.CASCADE)
     memo = models.TextField(_("memo"), blank=True, null=True)
 
     def __str__(self):
@@ -153,10 +161,12 @@ class OfferSheet(generic.BO):
         ('9', _("APPROVED")),
     )
     code = models.CharField(_("code"), max_length=const.DB_CHAR_NAME_20, blank=True, null=True)
-    partner = models.ForeignKey(Partner, verbose_name=_("partner"), limit_choices_to={"partner_type": "C"} ,on_delete=models.deletion.CASCADE)
+    partner = models.ForeignKey(Partner, verbose_name=_("partner"), limit_choices_to={"partner_type": "C"},
+                                on_delete=models.deletion.CASCADE)
     offer_date = models.DateField(_("offer date"))
     deliver_date = models.DateField(_("deliver date"))
-    org = models.ForeignKey(Organization, verbose_name=_("organization"), blank=True, null=True ,on_delete=models.deletion.CASCADE)
+    org = models.ForeignKey(Organization, verbose_name=_("organization"), blank=True, null=True,
+                            on_delete=models.deletion.CASCADE)
     title = models.CharField(_("title"), max_length=const.DB_CHAR_NAME_40)
     description = models.TextField(_("memo"), blank=True, null=True)
 
@@ -164,7 +174,8 @@ class OfferSheet(generic.BO):
                                  default=0.00)
     discount_amount = models.DecimalField(_("discount amount"), max_digits=12, decimal_places=2, blank=True, null=True,
                                           default=0.00)
-    user = models.ForeignKey(User, verbose_name=_("offer man"), blank=True, null=True ,on_delete=models.deletion.CASCADE)
+    user = models.ForeignKey(User, verbose_name=_("offer man"), blank=True, null=True,
+                             on_delete=models.deletion.CASCADE)
 
     attach = models.FileField(_('offer sheet file'), blank=True, null=True, upload_to='offer sheet',
                               help_text=u'您可导入报价明细，模板请参考文档FD0006')
@@ -179,7 +190,7 @@ class OfferSheet(generic.BO):
             sql = 'UPDATE sale_offeritem a SET a.discount_price = a.sale_price - ' \
                   '((SELECT discount_amount/amount FROM sale_offersheet WHERE id = %s) * (a.sale_price*a.cnt)/a.cnt) WHERE a.master_id = %s'
             params = [self.id, self.id]
-            #print( sql % (self.id,self.id)
+            # print( sql % (self.id,self.id)
             generic.update(sql, params)
 
         item_count = OfferItem.objects.filter(master=self).count()
@@ -237,7 +248,8 @@ class OfferItem(models.Model):
     material = models.ForeignKey(Material, verbose_name=_("material"),
                                  on_delete=models.deletion.CASCADE,
                                  limit_choices_to={"is_virtual": "0", 'can_sale': '1'}, blank=True, null=True)
-    measure = models.ForeignKey(Measure, verbose_name=_("measure"), blank=True, null=True, on_delete=models.deletion.CASCADE)
+    measure = models.ForeignKey(Measure, verbose_name=_("measure"), blank=True, null=True,
+                                on_delete=models.deletion.CASCADE)
     cnt = models.DecimalField(_("count"), max_digits=14, decimal_places=4)
     brand = models.CharField(_('brand'), max_length=const.DB_CHAR_NAME_20, blank=True, null=True)
     cost_price = models.DecimalField(_("cost price"), max_digits=14, decimal_places=4, blank=True, null=True)
@@ -260,7 +272,7 @@ class OfferItem(models.Model):
         super(OfferItem, self).save(force_insert, force_update, using, update_fields)
         sql = 'update sale_offersheet set amount = (select sum(sale_price*cnt) from sale_offeritem where master_id=%s) where id=%s'
         params = [self.master.id, self.master.id]
-        #print( sql % (self.master.id,self.master.id)
+        # print( sql % (self.master.id,self.master.id)
         generic.update(sql, params)
 
     class Meta:

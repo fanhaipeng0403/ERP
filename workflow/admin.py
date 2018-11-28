@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
-from common import generic
 from django.contrib import admin
 from django.contrib.contenttypes.models import ContentType
+
+from common import generic
 from workflow.models import Modal, Node, TodoList, Instance, History
 
 
@@ -26,8 +27,8 @@ class WorkflowModelAdmin(admin.ModelAdmin):
     )
 
     def get_form(self, request, obj=None, **kwargs):
-       print( kwargs)
-       return super(WorkflowModelAdmin, self).get_form(request, obj, **kwargs)
+        print(kwargs)
+        return super(WorkflowModelAdmin, self).get_form(request, obj, **kwargs)
 
     def save_model(self, request, obj, form, change):
         import datetime
@@ -75,11 +76,11 @@ class WorkflowNodeAdmin(admin.ModelAdmin):
     def formfield_for_manytomany(self, db_field, request=None, **kwargs):
         if db_field.name == 'next':
             apps = generic.get_app_model_info_from_request(request)
-            #print( apps
+            # print( apps
             if apps and apps.get('obj'):
-                #print( 'it is here'
+                # print( 'it is here'
                 obj = apps.get('obj')
-                #print( obj.modal
+                # print( obj.modal
                 kwargs['queryset'] = Node.objects.filter(modal=obj.modal).exclude(id=obj.id)
             else:
                 kwargs['queryset'] = Node.objects.filter(id=-1)

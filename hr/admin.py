@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
-from common import generic
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
+
+from common import generic
 from hr.models import Entry, SalaryItem, EmployeeSalaryItem
 
 

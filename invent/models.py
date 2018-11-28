@@ -148,13 +148,15 @@ class StockIn(generic.BO):
     )
     index_weight = 3
     code = models.CharField(_("code"), max_length=const.DB_CHAR_NAME_20, blank=True, null=True)
-    org = models.ForeignKey(Organization, verbose_name=_("organization"), blank=True, null=True , on_delete=models.deletion.PROTECT)
-    warehouse = models.ForeignKey(Warehouse, verbose_name=_("warehouse") , on_delete=models.deletion.PROTECT)
+    org = models.ForeignKey(Organization, verbose_name=_("organization"), blank=True, null=True,
+                            on_delete=models.deletion.PROTECT)
+    warehouse = models.ForeignKey(Warehouse, verbose_name=_("warehouse"), on_delete=models.deletion.PROTECT)
     title = models.CharField(_("title"), max_length=const.DB_CHAR_NAME_40)
-    user = models.ForeignKey(User, verbose_name=_("user"), blank=True, null=True , on_delete=models.deletion.PROTECT)
+    user = models.ForeignKey(User, verbose_name=_("user"), blank=True, null=True, on_delete=models.deletion.PROTECT)
     status = models.CharField(_("status"), max_length=const.DB_CHAR_CODE_2, default='0', choices=STATUS)
     execute_time = models.DateTimeField(_("execute time"), blank=True, null=True)
-    po = models.ForeignKey(PurchaseOrder, verbose_name=_("purchase order"), null=True, limit_choices_to={"entry_status": "0"}, blank=True , on_delete=models.deletion.PROTECT)
+    po = models.ForeignKey(PurchaseOrder, verbose_name=_("purchase order"), null=True,
+                           limit_choices_to={"entry_status": "0"}, blank=True, on_delete=models.deletion.PROTECT)
     amount = models.DecimalField(_("stock in money of amount"), max_digits=14, decimal_places=4, blank=True, null=True)
     batch = models.CharField(_("batch"), max_length=const.DB_CHAR_NAME_20, blank=True, null=True)
 
@@ -242,13 +244,16 @@ class StockOut(generic.BO):
     )
     index_weight = 2
     code = models.CharField(_("code"), max_length=const.DB_CHAR_NAME_20, blank=True, null=True)
-    org = models.ForeignKey(Organization, verbose_name=_("organization"), blank=True, null=True , on_delete=models.deletion.PROTECT)
+    org = models.ForeignKey(Organization, verbose_name=_("organization"), blank=True, null=True,
+                            on_delete=models.deletion.PROTECT)
     title = models.CharField(_("title"), max_length=const.DB_CHAR_NAME_40)
-    project = models.ForeignKey(Project, verbose_name=_("project"), blank=True, null=True , on_delete=models.deletion.PROTECT)
-    wo = models.ForeignKey(WorkOrder, verbose_name=_("work order"), blank=True, null=True , on_delete=models.deletion.PROTECT)
+    project = models.ForeignKey(Project, verbose_name=_("project"), blank=True, null=True,
+                                on_delete=models.deletion.PROTECT)
+    wo = models.ForeignKey(WorkOrder, verbose_name=_("work order"), blank=True, null=True,
+                           on_delete=models.deletion.PROTECT)
     description = models.TextField(_("description"), blank=True, null=True)
     amount = models.DecimalField(_("money of amount"), max_digits=14, decimal_places=4, blank=True, null=True)
-    user = models.ForeignKey(User, verbose_name=_("out user"), blank=True, null=True , on_delete=models.deletion.PROTECT)
+    user = models.ForeignKey(User, verbose_name=_("out user"), blank=True, null=True, on_delete=models.deletion.PROTECT)
     status = models.CharField(_("status"), max_length=const.DB_CHAR_CODE_2, default='0', choices=STATUS)
     execute_time = models.DateTimeField(_("execute time"), blank=True, null=True)
 
@@ -302,13 +307,13 @@ class WareReturn(generic.BO):
     )
     index_weight = 5
     code = models.CharField(_("code"), max_length=const.DB_CHAR_NAME_20, blank=True, null=True)
-    org = models.ForeignKey(Organization, verbose_name=_("organization"), blank=True, null=True , on_delete=models.deletion.PROTECT)
+    org = models.ForeignKey(Organization, verbose_name=_("organization"), blank=True, null=True,
+                            on_delete=models.deletion.PROTECT)
 
     title = models.CharField(_("title"), max_length=const.DB_CHAR_NAME_40)
-    out = models.ForeignKey(StockOut, verbose_name=_('StockOut') , on_delete=models.deletion.PROTECT)
+    out = models.ForeignKey(StockOut, verbose_name=_('StockOut'), on_delete=models.deletion.PROTECT)
     amount = models.DecimalField(_("money of amount"), max_digits=14, decimal_places=4, blank=True, null=True)
-    user = models.ForeignKey(User, verbose_name=_("out user"), blank=True, null=True , on_delete=models.deletion.CASCADE)
-
+    user = models.ForeignKey(User, verbose_name=_("out user"), blank=True, null=True, on_delete=models.deletion.CASCADE)
 
     status = models.CharField(_("status"), max_length=const.DB_CHAR_CODE_2, default='0', choices=STATUS)
     execute_time = models.DateTimeField(_("execute time"), blank=True, null=True)
@@ -359,10 +364,11 @@ class WareAdjust(generic.BO):
     )
     index_weight = 4
     code = models.CharField(_("code"), max_length=const.DB_CHAR_NAME_20, blank=True, null=True)
-    org = models.ForeignKey(Organization, verbose_name=_("organization"), blank=True, null=True , on_delete=models.deletion.CASCADE)
+    org = models.ForeignKey(Organization, verbose_name=_("organization"), blank=True, null=True,
+                            on_delete=models.deletion.CASCADE)
     title = models.CharField(_("title"), max_length=const.DB_CHAR_NAME_40)
     description = models.TextField(_("description"), blank=True, null=True)
-    user = models.ForeignKey(User, verbose_name=_("out user"), blank=True, null=True , on_delete=models.deletion.CASCADE)
+    user = models.ForeignKey(User, verbose_name=_("out user"), blank=True, null=True, on_delete=models.deletion.CASCADE)
     status = models.CharField(_("status"), max_length=const.DB_CHAR_CODE_2, default='0', choices=STATUS)
     execute_time = models.DateTimeField(_("execute time"), blank=True, null=True)
 
@@ -401,10 +407,13 @@ class InOutDetail(models.Model):
     create_time = models.DateTimeField(_("create time"), auto_now_add=True)
     status = models.BooleanField(_("executed"), default=0)
     event_time = models.DateTimeField(_("event time"), blank=True, null=True)
-    warehouse = models.ForeignKey(Warehouse, verbose_name=_("warehouse"), blank=True, null=True , on_delete=models.deletion.CASCADE)
-    material = models.ForeignKey(Material, verbose_name=_("material"), limit_choices_to={"is_virtual": "0"}, blank=True , on_delete=models.deletion.CASCADE,
+    warehouse = models.ForeignKey(Warehouse, verbose_name=_("warehouse"), blank=True, null=True,
+                                  on_delete=models.deletion.CASCADE)
+    material = models.ForeignKey(Material, verbose_name=_("material"), limit_choices_to={"is_virtual": "0"}, blank=True,
+                                 on_delete=models.deletion.CASCADE,
                                  null=True)
-    measure = models.ForeignKey(Measure, verbose_name=_("measure"), blank=True, null=True , on_delete=models.deletion.CASCADE)
+    measure = models.ForeignKey(Measure, verbose_name=_("measure"), blank=True, null=True,
+                                on_delete=models.deletion.CASCADE)
     cnt = models.DecimalField(_("count"), max_digits=14, decimal_places=4, blank=True, null=True)
     batch = models.CharField(_("batch"), max_length=const.DB_CHAR_NAME_20, blank=True, null=True)
     price = models.DecimalField(_("price"), max_digits=14, decimal_places=4, blank=True, null=True)
@@ -416,7 +425,7 @@ class InitItem(InOutDetail):
     """
     期初入库明细
     """
-    master = models.ForeignKey(InitialInventory , on_delete=models.deletion.CASCADE)
+    master = models.ForeignKey(InitialInventory, on_delete=models.deletion.CASCADE)
 
     class Meta:
         verbose_name = _("init item")
@@ -427,8 +436,9 @@ class InItem(InOutDetail):
     """
     入库单明细
     """
-    master = models.ForeignKey(StockIn , on_delete=models.deletion.CASCADE)
-    po_item = models.ForeignKey(POItem, verbose_name=_("po item"), blank=True, null=True , on_delete=models.deletion.CASCADE)
+    master = models.ForeignKey(StockIn, on_delete=models.deletion.CASCADE)
+    po_item = models.ForeignKey(POItem, verbose_name=_("po item"), blank=True, null=True,
+                                on_delete=models.deletion.CASCADE)
 
     def get_new_price(self):
         if self.po_item and self.master.warehouse:
@@ -460,8 +470,9 @@ class OutItem(InOutDetail):
     """
     出库单明细
     """
-    master = models.ForeignKey(StockOut , on_delete=models.deletion.CASCADE)
-    inventory = models.ForeignKey(Inventory, blank=True, null=True, verbose_name=_("inventory material") , on_delete=models.deletion.CASCADE)
+    master = models.ForeignKey(StockOut, on_delete=models.deletion.CASCADE)
+    inventory = models.ForeignKey(Inventory, blank=True, null=True, verbose_name=_("inventory material"),
+                                  on_delete=models.deletion.CASCADE)
 
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):
@@ -482,8 +493,9 @@ class ReturnItem(InOutDetail):
     """
     返库单明细
     """
-    master = models.ForeignKey(WareReturn , on_delete=models.deletion.CASCADE)
-    out_item = models.ForeignKey(OutItem, blank=True, null=True, verbose_name=_('out item') , on_delete=models.deletion.CASCADE)
+    master = models.ForeignKey(WareReturn, on_delete=models.deletion.CASCADE)
+    out_item = models.ForeignKey(OutItem, blank=True, null=True, verbose_name=_('out item'),
+                                 on_delete=models.deletion.CASCADE)
     out_cnt = models.DecimalField(_("out count"), max_digits=14, decimal_places=4)
 
     class Meta:
@@ -495,8 +507,9 @@ class AdjustItem(InOutDetail):
     """
     库存调整明细
     """
-    master = models.ForeignKey(WareAdjust , on_delete=models.deletion.CASCADE)
-    inventory = models.ForeignKey(Inventory, blank=True, null=True, verbose_name=_("inventory material") , on_delete=models.deletion.CASCADE)
+    master = models.ForeignKey(WareAdjust, on_delete=models.deletion.CASCADE)
+    inventory = models.ForeignKey(Inventory, blank=True, null=True, verbose_name=_("inventory material"),
+                                  on_delete=models.deletion.CASCADE)
 
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):

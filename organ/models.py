@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from common import const
-from common import generic
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+
+from common import const
+from common import generic
 
 
 class Organization(generic.BO):
@@ -52,10 +53,11 @@ class OrgUnit(generic.BO):
         (5, _('COMMITTEE'))
     )
     index_weight = 2
-    parent = models.ForeignKey('self', verbose_name=_("parent"), null=True, blank=True , on_delete=models.deletion.CASCADE)
+    parent = models.ForeignKey('self', verbose_name=_("parent"), null=True, blank=True,
+                               on_delete=models.deletion.CASCADE)
 
-    organization = models.ForeignKey(Organization, verbose_name=_('organization'), null=True, blank=True , on_delete=models.deletion.CASCADE)
-
+    organization = models.ForeignKey(Organization, verbose_name=_('organization'), null=True, blank=True,
+                                     on_delete=models.deletion.CASCADE)
 
     code = models.CharField(_("code"), max_length=const.DB_CHAR_CODE_8, blank=True, null=True)
     name = models.CharField(_("name"), max_length=const.DB_CHAR_NAME_120)
@@ -94,9 +96,11 @@ class Position(generic.BO):
         ('05', _("EXPERT")),
     )
     index_weight = 3
-    unit = models.ForeignKey(OrgUnit, verbose_name=_('org unit') , on_delete=models.deletion.CASCADE)
-    organization = models.ForeignKey(Organization, verbose_name=_('organization'), null=True, blank=True , on_delete=models.deletion.CASCADE)
-    parent = models.ForeignKey('self', verbose_name=_("parent"), null=True, blank=True , on_delete=models.deletion.CASCADE)
+    unit = models.ForeignKey(OrgUnit, verbose_name=_('org unit'), on_delete=models.deletion.CASCADE)
+    organization = models.ForeignKey(Organization, verbose_name=_('organization'), null=True, blank=True,
+                                     on_delete=models.deletion.CASCADE)
+    parent = models.ForeignKey('self', verbose_name=_("parent"), null=True, blank=True,
+                               on_delete=models.deletion.CASCADE)
     code = models.CharField(_("position code"), max_length=const.DB_CHAR_CODE_8, blank=True, null=True)
     name = models.CharField(_("position name"), max_length=const.DB_CHAR_NAME_120)
     short = models.CharField(_("short name"), max_length=const.DB_CHAR_NAME_20, blank=True, null=True)

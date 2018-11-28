@@ -2,18 +2,16 @@
 
 import datetime
 
-from common import const
-from common import generic
 from django.contrib.auth.models import User
-
 from django.contrib.contenttypes.fields import GenericForeignKey
 # content_type表将app名称与其中的表的关系进行保存
 from django.contrib.contenttypes.models import ContentType
-
 from django.db import models
 from django.utils.encoding import force_text
 from django.utils.translation import ugettext_lazy as _
 
+from common import const
+from common import generic
 from organ.models import Organization, Position
 from plugin.xls import ExcelManager
 from syscfg.models import Module
@@ -26,13 +24,14 @@ class ValueList(generic.BO):
     index_weight = 9
     code = models.CharField(_("list code"), max_length=const.DB_CHAR_CODE_6, blank=True, null=True)
     name = models.CharField(_("list name"), max_length=const.DB_CHAR_NAME_40)
-    module = models.ForeignKey(Module, verbose_name=_("module"), blank=True, null=True, on_delete=models.deletion.PROTECT)
-
+    module = models.ForeignKey(Module, verbose_name=_("module"), blank=True, null=True,
+                               on_delete=models.deletion.PROTECT)
 
     status = models.BooleanField(_("in use"), default=True)
     init = models.BooleanField(_("is init"), default=False)
     locked = models.BooleanField(_("is locked"), default=False)
-    locked_by = models.ForeignKey(User, verbose_name=_("locked by"), blank=True, null=True, on_delete=models.deletion.PROTECT)
+    locked_by = models.ForeignKey(User, verbose_name=_("locked by"), blank=True, null=True,
+                                  on_delete=models.deletion.PROTECT)
 
     lock_time = models.DateTimeField(_("locked time"), null=True, blank=True)
 
@@ -52,7 +51,7 @@ class ValueListItem(models.Model):
     """
     值列表项
     """
-    group = models.ForeignKey(ValueList, verbose_name=_("list group") , on_delete=models.deletion.PROTECT)
+    group = models.ForeignKey(ValueList, verbose_name=_("list group"), on_delete=models.deletion.PROTECT)
     group_code = models.CharField(max_length=const.DB_CHAR_CODE_6, blank=True, null=True)
     code = models.CharField(_("item code"), max_length=const.DB_CHAR_CODE_6, blank=True, null=True)
     name = models.CharField(_("item name"), max_length=const.DB_CHAR_NAME_40)
@@ -102,16 +101,16 @@ class Address(generic.BO):
     phone = models.CharField(_("phone"), max_length=const.DB_CHAR_NAME_20, blank=True, null=True)
     contacts = models.CharField(_("contacts"), max_length=const.DB_CHAR_NAME_40, blank=True, null=True)
 
-# https://www.cnblogs.com/c491873412/p/7892585.html ，    GenericForeignKey,  ForeignKey, 泛型外键，将外键id储存在字段里，而不用新建字段
-########################################################################################################
+    # https://www.cnblogs.com/c491873412/p/7892585.html ，    GenericForeignKey,  ForeignKey, 泛型外键，将外键id储存在字段里，而不用新建字段
+    ########################################################################################################
 
-    content_type = models.ForeignKey(ContentType, blank=True, null=True , on_delete=models.deletion.PROTECT)
+    content_type = models.ForeignKey(ContentType, blank=True, null=True, on_delete=models.deletion.PROTECT)
     object_id = models.PositiveIntegerField(blank=True, null=True)
     content_object = GenericForeignKey('content_type', 'object_id')
 
     # GenericRelaton
 
-########################################################################################################
+    ########################################################################################################
 
     class Meta:
         verbose_name = _('address')
@@ -134,7 +133,8 @@ class Partner(generic.BO):
         ('C', 'C'),
         ('D', 'D'),
     )
-    org = models.ForeignKey(Organization, verbose_name=_("organization"), blank=True, null=True , on_delete=models.deletion.PROTECT)
+    org = models.ForeignKey(Organization, verbose_name=_("organization"), blank=True, null=True,
+                            on_delete=models.deletion.PROTECT)
     code = models.CharField(_("partner code"), max_length=const.DB_CHAR_NAME_20, blank=True, null=True)
     name = models.CharField(_("partner name"), max_length=const.DB_CHAR_NAME_120)
     short = models.CharField(_("short name"), max_length=const.DB_CHAR_NAME_20, blank=True, null=True)
@@ -166,8 +166,10 @@ class BankAccount(generic.BO):
     account = models.CharField(_("account num"), max_length=const.DB_CHAR_NAME_40)
     title = models.CharField(_("bank name"), max_length=const.DB_CHAR_NAME_40)
     memo = models.CharField(_("memo"), max_length=const.DB_CHAR_NAME_20, blank=True, null=True)
-    partner = models.ForeignKey(Partner, verbose_name=_("partner"), blank=True, null=True , on_delete=models.deletion.PROTECT)
-    org = models.ForeignKey(Organization, verbose_name=_("organization"), blank=True, null=True , on_delete=models.deletion.PROTECT)
+    partner = models.ForeignKey(Partner, verbose_name=_("partner"), blank=True, null=True,
+                                on_delete=models.deletion.PROTECT)
+    org = models.ForeignKey(Organization, verbose_name=_("organization"), blank=True, null=True,
+                            on_delete=models.deletion.PROTECT)
 
     def __str__(self):
         name = ''
@@ -195,7 +197,8 @@ class Project(generic.BO):
     short = models.CharField(_("short name"), max_length=const.DB_CHAR_NAME_20, blank=True, null=True)
     pinyin = models.CharField(_("pinyin"), max_length=const.DB_CHAR_NAME_120, blank=True, null=True)
 
-    partner = models.ForeignKey(Partner, blank=True, null=True, verbose_name=_("partner") , on_delete=models.deletion.PROTECT,
+    partner = models.ForeignKey(Partner, blank=True, null=True, verbose_name=_("partner"),
+                                on_delete=models.deletion.PROTECT,
                                 limit_choices_to={"partner_type": "C"})
     status = models.CharField(_("status"), max_length=const.DB_CHAR_CODE_2, blank=True, null=True, default='00',
                               choices=STATUS)
@@ -213,7 +216,8 @@ class Project(generic.BO):
     business = models.FileField(_("business document"), upload_to='project', blank=True, null=True)
 
     users = models.ManyToManyField(User, verbose_name=_("related users"), blank=True)
-    org = models.ForeignKey(Organization, verbose_name=_("organization"), blank=True, null=True , on_delete=models.deletion.PROTECT)
+    org = models.ForeignKey(Organization, verbose_name=_("organization"), blank=True, null=True,
+                            on_delete=models.deletion.PROTECT)
 
     class Meta:
         verbose_name = _('project')
@@ -230,7 +234,8 @@ class Warehouse(models.Model):
     status = models.BooleanField(_("in use"), default=True)
     location = models.CharField(_("location"), max_length=const.DB_CHAR_NAME_120, blank=True, null=True)
     users = models.ManyToManyField(User, verbose_name=_("related users"), blank=True)
-    org = models.ForeignKey(Organization, verbose_name=_("organization"), blank=True, null=True , on_delete=models.deletion.PROTECT)
+    org = models.ForeignKey(Organization, verbose_name=_("organization"), blank=True, null=True,
+                            on_delete=models.deletion.PROTECT)
 
     def __str__(self):
         return '%s' % self.name
@@ -265,7 +270,8 @@ class Trade(models.Model):
     code = models.CharField(_("code"), max_length=const.DB_CHAR_CODE_6)
     name = models.CharField(_("name"), max_length=const.DB_CHAR_NAME_120)
     memo = models.CharField(_("memo"), max_length=const.DB_CHAR_NAME_120, null=True, blank=True)
-    parent = models.ForeignKey('self', verbose_name=_("parent"), null=True, blank=True , on_delete=models.deletion.PROTECT)
+    parent = models.ForeignKey('self', verbose_name=_("parent"), null=True, blank=True,
+                               on_delete=models.deletion.PROTECT)
 
     def __str__(self):
         return '%s' % self.name
@@ -281,7 +287,7 @@ class Brand(models.Model):
     品牌
     """
     index_weight = 101
-    trade = models.ForeignKey(Trade, verbose_name=_("trade"), null=True, blank=True , on_delete=models.deletion.PROTECT)
+    trade = models.ForeignKey(Trade, verbose_name=_("trade"), null=True, blank=True, on_delete=models.deletion.PROTECT)
     name = models.CharField(_("name"), max_length=const.DB_CHAR_NAME_120)
     pinyin = models.CharField(_("pinyin"), max_length=const.DB_CHAR_NAME_120, blank=True, null=True)
     weight = models.IntegerField(_("weight"), blank=True, null=True, default=99)
@@ -299,8 +305,9 @@ class Category(models.Model):
     分类
     """
     index_weight = 100
-    trade = models.ForeignKey(Trade, verbose_name=_("trade"), null=True, blank=True , on_delete=models.deletion.PROTECT)
-    parent = models.ForeignKey('self', verbose_name=_("parent"), null=True, blank=True , on_delete=models.deletion.PROTECT)
+    trade = models.ForeignKey(Trade, verbose_name=_("trade"), null=True, blank=True, on_delete=models.deletion.PROTECT)
+    parent = models.ForeignKey('self', verbose_name=_("parent"), null=True, blank=True,
+                               on_delete=models.deletion.PROTECT)
     code = models.CharField(_("code"), max_length=const.DB_CHAR_CODE_6, null=True, blank=True)
     name = models.CharField(_("name"), max_length=const.DB_CHAR_NAME_120)
     path = models.CharField(_("path"), max_length=const.DB_CHAR_NAME_200, null=True, blank=True)
@@ -335,7 +342,8 @@ class TechnicalParameterValue(models.Model):
     """
     技术参数-值，将技术参数绑定于物料分类上，在此分类下的物料自动继承全部技术参数
     """
-    tech_name = models.ForeignKey(TechnicalParameterName, verbose_name=_("technical name") , on_delete=models.deletion.PROTECT)
+    tech_name = models.ForeignKey(TechnicalParameterName, verbose_name=_("technical name"),
+                                  on_delete=models.deletion.PROTECT)
     value = models.CharField(_("value"), max_length=const.DB_CHAR_NAME_80)
     description = models.CharField(_("description"), max_length=const.DB_CHAR_NAME_80, null=True, blank=True)
 
@@ -357,8 +365,9 @@ class Material(generic.BO):
     name = models.CharField(_("material name"), max_length=const.DB_CHAR_NAME_120)
     spec = models.CharField(_("specifications"), max_length=const.DB_CHAR_NAME_120, blank=True, null=True)
     pinyin = models.CharField(_("pinyin"), max_length=const.DB_CHAR_NAME_120, blank=True, null=True)
-    brand = models.ForeignKey(Brand, blank=True, null=True, verbose_name=_("brand") , on_delete=models.deletion.PROTECT)
-    category = models.ForeignKey(Category, blank=True, null=True, verbose_name=_("category") , on_delete=models.deletion.PROTECT)
+    brand = models.ForeignKey(Brand, blank=True, null=True, verbose_name=_("brand"), on_delete=models.deletion.PROTECT)
+    category = models.ForeignKey(Category, blank=True, null=True, verbose_name=_("category"),
+                                 on_delete=models.deletion.PROTECT)
     tp = models.CharField(_('mt type'), blank=True, null=True, max_length=const.DB_CHAR_CODE_2,
                           choices=const.get_value_list('S054'), default='10')
     status = models.BooleanField(_("in use"), default=True)
@@ -366,7 +375,8 @@ class Material(generic.BO):
     can_sale = models.BooleanField(_("can sale"), default=True)
     is_virtual = models.BooleanField(_("is virtual"), default=False)
 
-    warehouse = models.ForeignKey(Warehouse, blank=True, null=True, verbose_name=_("warehouse") , on_delete=models.deletion.PROTECT)
+    warehouse = models.ForeignKey(Warehouse, blank=True, null=True, verbose_name=_("warehouse"),
+                                  on_delete=models.deletion.PROTECT)
     measure = models.ManyToManyField(Measure, verbose_name=_("measure"))
 
     params = models.ManyToManyField(TechnicalParameterValue, verbose_name=_("technical parameter"),
@@ -375,7 +385,8 @@ class Material(generic.BO):
     stock_price = models.DecimalField(_("stock price"), max_digits=14, decimal_places=4, blank=True, null=True)
     purchase_price = models.DecimalField(_("purchase price"), max_digits=14, decimal_places=4, blank=True, null=True)
     sale_price = models.DecimalField(_("sale price"), max_digits=14, decimal_places=4, blank=True, null=True)
-    org = models.ForeignKey(Organization, verbose_name=_("organization"), blank=True, null=True , on_delete=models.deletion.PROTECT)
+    org = models.ForeignKey(Organization, verbose_name=_("organization"), blank=True, null=True,
+                            on_delete=models.deletion.PROTECT)
 
     def __str__(self):
         return "%s %s" % (self.code, self.name)
@@ -390,9 +401,9 @@ class MaterialParam(models.Model):
     """
 
     """
-    material = models.ForeignKey(Material , on_delete=models.deletion.PROTECT)
-    param_value = models.ForeignKey(TechnicalParameterValue , on_delete=models.deletion.PROTECT)
-    param_name = models.ForeignKey(TechnicalParameterName, blank=Trade, null=True , on_delete=models.deletion.PROTECT)
+    material = models.ForeignKey(Material, on_delete=models.deletion.PROTECT)
+    param_value = models.ForeignKey(TechnicalParameterValue, on_delete=models.deletion.PROTECT)
+    param_name = models.ForeignKey(TechnicalParameterName, blank=Trade, null=True, on_delete=models.deletion.PROTECT)
     creation = models.DateField(auto_now_add=True)
 
     def __str__(self):
@@ -412,7 +423,7 @@ class ExtraParam(models.Model):
         ('NUM', _('NUMBER')),
         ('DATE', _('DATE')),
     )
-    material = models.ForeignKey(Material, verbose_name=_("material") , on_delete=models.deletion.PROTECT)
+    material = models.ForeignKey(Material, verbose_name=_("material"), on_delete=models.deletion.PROTECT)
     name = models.CharField(_("name"), max_length=const.DB_CHAR_NAME_40)
     data_type = models.CharField(_("data type"), default='CHAR', choices=DATA_TYPE, max_length=const.DB_CHAR_CODE_6)
     data_source = models.CharField(_("data source"), blank=True, null=True, max_length=const.DB_CHAR_NAME_40)
@@ -442,9 +453,11 @@ class ExpenseAccount(generic.BO):
     name = models.CharField(_("name"), max_length=const.DB_CHAR_NAME_120)
     category = models.CharField(_("category"), max_length=const.DB_CHAR_CODE_4, choices=CATEGORY, default='PU')
     description = models.TextField(_("description"), blank=True, null=True)
-    parent = models.ForeignKey('self', verbose_name=_("parent"), null=True, blank=True , on_delete=models.deletion.PROTECT)
+    parent = models.ForeignKey('self', verbose_name=_("parent"), null=True, blank=True,
+                               on_delete=models.deletion.PROTECT)
     status = models.BooleanField(_("in use"), default=True)
-    org = models.ForeignKey(Organization, verbose_name=_("organization"), blank=True, null=True , on_delete=models.deletion.PROTECT)
+    org = models.ForeignKey(Organization, verbose_name=_("organization"), blank=True, null=True,
+                            on_delete=models.deletion.PROTECT)
 
     class Meta:
         verbose_name = _('expenses account')
@@ -459,7 +472,8 @@ class Employee(generic.BO):
     index_weight = 2
     code = models.CharField(_("employee number"), max_length=const.DB_CHAR_NAME_20, blank=True, null=True)
     phone = models.CharField(_("phone"), max_length=const.DB_CHAR_NAME_20, blank=True, null=True)
-    organization = models.ForeignKey(Organization, verbose_name=_('organization'), null=True, blank=True , on_delete=models.deletion.PROTECT)
+    organization = models.ForeignKey(Organization, verbose_name=_('organization'), null=True, blank=True,
+                                     on_delete=models.deletion.PROTECT)
     name = models.CharField(_("employee name"), max_length=const.DB_CHAR_NAME_120)
     pinyin = models.CharField(_("pinyin"), max_length=const.DB_CHAR_NAME_120, blank=True, null=True)
     birthday = models.DateField(_("birthday"), blank=True, null=True)
@@ -478,7 +492,7 @@ class Employee(generic.BO):
     email = models.CharField(_("email"), max_length=const.DB_CHAR_NAME_20, blank=True, null=True)
     office = models.CharField(_("office phone"), max_length=const.DB_CHAR_NAME_20, blank=True, null=True)
 
-    position = models.ForeignKey(Position, verbose_name=_('position') , on_delete=models.deletion.PROTECT)
+    position = models.ForeignKey(Position, verbose_name=_('position'), on_delete=models.deletion.PROTECT)
     rank = models.CharField(_("employee rank"), max_length=const.DB_CHAR_CODE_2, default='00',
                             choices=const.get_value_list('S017'))
 
@@ -523,7 +537,7 @@ class Employee(generic.BO):
     tag4 = models.CharField(_("tag4 byzk"), max_length=const.DB_CHAR_CODE_2, blank=True, null=True,
                             choices=const.get_value_list('S027'), default='0')
 
-    user = models.ForeignKey(User, verbose_name=_("user"), blank=True, null=True , on_delete=models.deletion.PROTECT)
+    user = models.ForeignKey(User, verbose_name=_("user"), blank=True, null=True, on_delete=models.deletion.PROTECT)
 
     def age(self):
         import datetime
@@ -565,7 +579,7 @@ class Family(generic.BO):
     organization = models.CharField(_("organization"), max_length=const.DB_CHAR_NAME_120, blank=True, null=True)
     phone = models.CharField(_("phone"), max_length=const.DB_CHAR_NAME_120, blank=True, null=True)
     emergency = models.BooleanField(_("emergency"), default=False)
-    employee = models.ForeignKey(Employee, verbose_name=_("employee") , on_delete=models.deletion.PROTECT)
+    employee = models.ForeignKey(Employee, verbose_name=_("employee"), on_delete=models.deletion.PROTECT)
 
     class Meta:
         verbose_name = _("family member")
@@ -582,7 +596,7 @@ class Education(generic.BO):
     major = models.CharField(_("major"), max_length=const.DB_CHAR_NAME_120, blank=True, null=True)
     degree = models.CharField(_("major degree"), max_length=const.DB_CHAR_CODE_2, blank=True, null=True,
                               choices=const.get_value_list('S037'), default='4')
-    employee = models.ForeignKey(Employee, verbose_name=_("employee") , on_delete=models.deletion.PROTECT)
+    employee = models.ForeignKey(Employee, verbose_name=_("employee"), on_delete=models.deletion.PROTECT)
 
     class Meta:
         verbose_name = _("education experience")
@@ -595,7 +609,7 @@ class WorkExperience(generic.BO):
     """
     organization = models.CharField(_("organization"), max_length=const.DB_CHAR_NAME_120)
     position = models.CharField(_("position"), max_length=const.DB_CHAR_NAME_120)
-    employee = models.ForeignKey(Employee, verbose_name=_("employee") , on_delete=models.deletion.PROTECT)
+    employee = models.ForeignKey(Employee, verbose_name=_("employee"), on_delete=models.deletion.PROTECT)
 
     class Meta:
         verbose_name = _("work experience")
@@ -617,7 +631,9 @@ class DataImport(generic.BO):
     description = models.TextField(_('description'), blank=True, null=True)
 
     # limit_choices_to, 只显示特定的关联
-    content_type = models.ForeignKey(ContentType, verbose_name=_("content type"), limit_choices_to={"app_label__in": ['basedata', 'organ', 'auth']} , on_delete=models.deletion.PROTECT)
+    content_type = models.ForeignKey(ContentType, verbose_name=_("content type"),
+                                     limit_choices_to={"app_label__in": ['basedata', 'organ', 'auth']},
+                                     on_delete=models.deletion.PROTECT)
 
     attach = models.FileField(_('attach'), blank=True, null=True, upload_to='data')
     is_clear = models.BooleanField(_('clear old data?'), default=0)
@@ -661,12 +677,12 @@ class DataImport(generic.BO):
                                 if type(v) == str:
                                     v = force_text(v.decode('gbk'))
                                 params[name] = v
-                                #print( 'name is %s value is %s'%(name,v)
+                                # print( 'name is %s value is %s'%(name,v)
                             try:
                                 params.pop('')
                             except Exception as e:
                                 pass
-                            #print( params
+                            # print( params
                             klass.objects.create(**params)
                     self.status = '1'
                     self.save()
@@ -697,8 +713,9 @@ class Document(generic.BO):
     description = models.TextField(_('description'), blank=True, null=True)
     tp = models.CharField(_('type'), max_length=const.DB_CHAR_CODE_2, default='10', choices=TP)
 
-    business_domain = models.CharField(_("business domain"), max_length=const.DB_CHAR_CODE_4, choices=const.get_value_list('S045'), default='OT')
-    user = models.ForeignKey(User, verbose_name=_('user'), blank=True, null=True , on_delete=models.deletion.PROTECT)
+    business_domain = models.CharField(_("business domain"), max_length=const.DB_CHAR_CODE_4,
+                                       choices=const.get_value_list('S045'), default='OT')
+    user = models.ForeignKey(User, verbose_name=_('user'), blank=True, null=True, on_delete=models.deletion.PROTECT)
     status = models.CharField(_('status'), max_length=const.DB_CHAR_CODE_2, default='0', choices=STATUS)
     pub_date = models.DateTimeField(_('publish date'), blank=True, null=True)
     size = models.CharField(_('size'), max_length=const.DB_CHAR_NAME_20, blank=True, null=True)

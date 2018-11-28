@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 
-
 from workflow.models import Node
 
 

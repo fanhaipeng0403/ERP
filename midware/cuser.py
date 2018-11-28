@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+# https://code.ziqiangxuetang.com/django/django-middleware.html
+# https://cnblogs.com/sss4/p/7106033.html
 from threading import local
 
 from django.apps import apps
@@ -8,6 +10,7 @@ from django.core.exceptions import PermissionDenied
 from django.http import Http404
 from django.urls import NoReverseMatch, reverse
 from django.utils import six
+from django.utils.deprecation import MiddlewareMixin
 from django.utils.text import capfirst
 
 _thread_local = local()
@@ -17,7 +20,7 @@ def getuser():
     return getattr(_thread_local, 'user', None)
 
 
-class RequestUser(object):
+class RequestUser(MiddlewareMixin):
 
     def process_request(self, request):
         django_user = getattr(request, 'user', None)
@@ -85,7 +88,7 @@ class RequestUser(object):
                 context.update(dict(todolist=todolist))
             except Exception as e:
                 pass
-            #print( context
+            # print( context
             view_kwargs['extra_context'] = context
 
         if view_func.__name__ == 'app_index':

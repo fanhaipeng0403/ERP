@@ -3,8 +3,6 @@
 from django.db import connection
 from django.utils.translation import ugettext_lazy as _
 
-
-
 DB_CHAR_CODE_2 = 2
 DB_CHAR_CODE_4 = 4
 DB_CHAR_CODE_6 = 6

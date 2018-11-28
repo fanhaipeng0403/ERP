@@ -37,7 +37,6 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-
     'syscfg',
     'basedata',
     'organ',
@@ -60,7 +59,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
 
-   # 自己写的中间件
+    # 自己写的中间件
     'midware.cuser.RequestUser',
 )
 
@@ -85,7 +84,6 @@ TEMPLATES = [
 TEMPLATE_THEME = 'default'
 
 WSGI_APPLICATION = 'mis.wsgi.application'
-
 
 DATABASES = {
     'default': {
@@ -112,11 +110,10 @@ USE_L10N = True
 
 USE_TZ = False
 
-
-
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-STATICFILES_DIRS = ( ('css', os.path.join(STATIC_ROOT, 'css')), ('js', os.path.join(STATIC_ROOT, 'js')), ('img', os.path.join(STATIC_ROOT, 'img')), )
+STATICFILES_DIRS = (('css', os.path.join(STATIC_ROOT, 'css')), ('js', os.path.join(STATIC_ROOT, 'js')),
+                    ('img', os.path.join(STATIC_ROOT, 'img')),)
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'upload')
 MEDIA_URL = '/upload/'

@@ -6,6 +6,7 @@ from django.http.response import HttpResponseRedirect
 from django.template.response import TemplateResponse
 from django.utils.encoding import force_text
 from django.utils.translation import ugettext_lazy as _
+
 from invent.models import StockIn, StockOut, InitialInventory, WareReturn, WareAdjust
 
 

@@ -9,6 +9,7 @@ from django.http.response import HttpResponseRedirect
 from django.template.response import TemplateResponse
 from django.utils.encoding import force_text
 from django.utils.translation import ugettext_lazy as _
+
 from plugin.wfactions import WorkflowActionManager, WorkflowAction
 from plugin.wfnodes import NextNodeManager, NextNodeHandler
 from plugin.wfusers import NextUserManager, NextUserHandler
@@ -29,7 +30,7 @@ def compile_node_handler(request, obj, next_node):
     next_user_handler = next_node.next_user_handler
     # next_user_handler 具有最高优先级
     if next_user_handler:
-        #print( 'it is here'
+        # print( 'it is here'
         klass = NextUserManager().handlers.get(next_user_handler)
         if klass and isinstance(klass, NextUserHandler):
             return klass.handle(request, obj, next_node)

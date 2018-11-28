@@ -2,11 +2,12 @@
 
 import datetime
 
+from django.db import models
+from django.utils.translation import ugettext_lazy as _
+
 from basedata.models import Position, Employee
 from common import const
 from common import generic
-from django.db import models
-from django.utils.translation import ugettext_lazy as _
 
 
 class SalaryItemHandler:
@@ -67,7 +68,7 @@ class Entry(generic.BO):
 
     guider = models.ForeignKey(Employee, verbose_name=_("guider"), on_delete=models.deletion.CASCADE)
 
-    position = models.ForeignKey(Position, verbose_name=_('designate position') ,on_delete=models.deletion.CASCADE)
+    position = models.ForeignKey(Position, verbose_name=_('designate position'), on_delete=models.deletion.CASCADE)
     rank = models.CharField(_("employee rank"), max_length=const.DB_CHAR_CODE_2, default='00',
                             choices=const.get_value_list('S017'))
     ygxs = models.CharField(_("employ ygxs"), max_length=const.DB_CHAR_CODE_2, blank=True, null=True,
@@ -96,7 +97,8 @@ class EmployeeSalaryItem(models.Model):
 
     """
     entry = models.ForeignKey(Entry, verbose_name=_("employee entry"), on_delete=models.deletion.CASCADE)
-    employee = models.ForeignKey(Employee, verbose_name=_("employee"), blank=True, null=True, on_delete=models.deletion.CASCADE)
+    employee = models.ForeignKey(Employee, verbose_name=_("employee"), blank=True, null=True,
+                                 on_delete=models.deletion.CASCADE)
     salary_item = models.ForeignKey(SalaryItem, verbose_name=_("salary item"), on_delete=models.deletion.CASCADE)
     calculate_way = models.CharField(_("calculate way"), max_length=const.DB_CHAR_CODE_2,
                                      choices=const.get_value_list('S050'), default='10')

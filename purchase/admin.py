@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
+from django.contrib import admin
+
 from basedata.models import BankAccount
 from common import generic
-from django.contrib import admin
 from purchase.models import PurchaseOrder, POItem, Invoice, Payment
 
 

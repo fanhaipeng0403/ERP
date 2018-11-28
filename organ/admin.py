@@ -2,9 +2,10 @@
 
 import datetime
 
+from django.contrib import admin
+
 from basedata.admin import BankAccountInline
 from common import generic
-from django.contrib import admin
 from organ.models import Organization, OrgUnit, Position
 
 
