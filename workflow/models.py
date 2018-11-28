@@ -20,7 +20,7 @@ class Modal(models.Model):
     code = models.CharField(_("workflow code"), max_length=const.DB_CHAR_CODE_6, blank=True, null=True)
     name = models.CharField(_("workflow name"), max_length=const.DB_CHAR_NAME_40)
     description = models.TextField(_("description"), blank=True, null=True)
-    content_type = models.ForeignKey(ContentType, verbose_name=_("content type"),
+    content_type = models.ForeignKey(ContentType, verbose_name=_("content type") , on_delete=models.deletion.PROTECT,
                                      limit_choices_to={"app_label__in": ['basedata', 'organ']})
     app_name = models.CharField(_("app name"), max_length=const.DB_CHAR_NAME_60, blank=True, null=True)
     model_name = models.CharField(_("model name"), max_length=const.DB_CHAR_NAME_60, blank=True, null=True)
@@ -53,7 +53,7 @@ class Node(models.Model):
         (4, _("submitter")),
     )
     index_weight = 2
-    modal = models.ForeignKey(Modal, verbose_name=_("workflow model"))
+    modal = models.ForeignKey(Modal, verbose_name=_("workflow model") , on_delete=models.deletion.PROTECT)
     code = models.CharField(_("node code"), max_length=const.DB_CHAR_CODE_4, blank=True, null=True)
     name = models.CharField(_("node name"), max_length=const.DB_CHAR_NAME_80)
     tooltip = models.CharField(_('tooltip words'), blank=True, null=True, max_length=const.DB_CHAR_NAME_120)
@@ -68,7 +68,6 @@ class Node(models.Model):
     short_message_notice = models.BooleanField(_("short message notice"), default=False)
     approve_node = models.BooleanField(_("approve node"), default=False)
     handler = models.TextField(_("handler"), blank=True, null=True, help_text=u'自定义SQL语句，优先高于指定用户、岗位、角色')
-    # added by zhugl 2015-05-10
     handler_type = models.IntegerField(_("handler type"), choices=HANDLER_TYPE, default=1)
     positions = models.ManyToManyField(Position, verbose_name=_("designated position"), blank=True)
     roles = models.ManyToManyField(Role, verbose_name=_("designated role"), blank=True)
@@ -113,9 +112,9 @@ class Instance(models.Model):
     )
     index_weight = 3
     code = models.CharField(_("code"), blank=True, null=True, max_length=const.DB_CHAR_CODE_10)
-    modal = models.ForeignKey(Modal, verbose_name=_("workflow model"))
+    modal = models.ForeignKey(Modal, verbose_name=_("workflow model") , on_delete=models.deletion.PROTECT)
     object_id = models.PositiveIntegerField("object id")
-    starter = models.ForeignKey(User, verbose_name=_("start user"), related_name="starter")
+    starter = models.ForeignKey(User, verbose_name=_("start user"), related_name="starter" , on_delete=models.deletion.PROTECT)
     start_time = models.DateTimeField(_("start time"), auto_now_add=True)
     approved_time = models.DateTimeField(_("approved time"), blank=True, null=True)
     status = models.IntegerField(_("status"), default=1, choices=STATUS)
@@ -147,9 +146,9 @@ class History(models.Model):
         (4, _("TERMINATE")),
     )
     index_weight = 5
-    inst = models.ForeignKey(Instance, verbose_name=_("workflow instance"))
-    node = models.ForeignKey(Node, verbose_name=_("workflow node"), blank=True, null=True)
-    user = models.ForeignKey(User, verbose_name=_("submitter"))
+    inst = models.ForeignKey(Instance, verbose_name=_("workflow instance") , on_delete=models.deletion.PROTECT)
+    node = models.ForeignKey(Node, verbose_name=_("workflow node"), blank=True, null=True , on_delete=models.deletion.PROTECT)
+    user = models.ForeignKey(User, verbose_name=_("submitter") , on_delete=models.deletion.PROTECT)
     pro_time = models.DateTimeField(_("process time"), auto_now_add=True)
     pro_type = models.IntegerField(_("process type"), choices=PROCESS_TYPE, default=0)
     memo = models.CharField(_("memo"), max_length=const.DB_CHAR_NAME_40, blank=True, null=True)
@@ -186,11 +185,11 @@ class TodoList(models.Model):
     """
     index_weight = 4
     code = models.CharField(_("code"), max_length=const.DB_CHAR_CODE_10, blank=True, null=True)
-    inst = models.ForeignKey(Instance, verbose_name=_("workflow instance"))
-    node = models.ForeignKey(Node, verbose_name=_("current node"), blank=True, null=True)
+    inst = models.ForeignKey(Instance, verbose_name=_("workflow instance") , on_delete=models.deletion.PROTECT)
+    node = models.ForeignKey(Node, verbose_name=_("current node"), blank=True, null=True , on_delete=models.deletion.PROTECT)
     app_name = models.CharField(_("app name"), max_length=const.DB_CHAR_NAME_60, blank=True, null=True)
     model_name = models.CharField(_("model name"), max_length=const.DB_CHAR_NAME_60, blank=True, null=True)
-    user = models.ForeignKey(User, verbose_name=_("handler"))
+    user = models.ForeignKey(User, verbose_name=_("handler") , on_delete=models.deletion.PROTECT)
     arrived_time = models.DateTimeField(_("arrived time"), auto_now_add=True)
     is_read = models.BooleanField(_("is read"), default=False)
     read_time = models.DateTimeField(_("read time"), blank=True, null=True)

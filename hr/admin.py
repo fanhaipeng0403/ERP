@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-# coding = utf-8
 from common import generic
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _

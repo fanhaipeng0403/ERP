@@ -5,8 +5,8 @@ from threading import local
 from django.apps import apps
 from django.contrib import admin
 from django.core.exceptions import PermissionDenied
-from django.core.urlresolvers import NoReverseMatch, reverse
 from django.http import Http404
+from django.urls import NoReverseMatch, reverse
 from django.utils import six
 from django.utils.text import capfirst
 

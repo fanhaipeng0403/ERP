@@ -12,7 +12,7 @@ from django.db.models.fields import related
 from django.http import HttpRequest, HttpResponse
 from django.utils.encoding import smart_str
 from django.utils.http import urlquote
-from django.utils.text import force_text
+from django.utils.encoding import force_text
 from django.utils.translation import ugettext_lazy as _
 
 from common import const
