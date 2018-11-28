@@ -1,1 +1,1 @@
-default_app_config = 'basedata.apps.BaseDataConfig'
+# -*- coding: utf-8 -*-

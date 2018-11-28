@@ -1,1 +1,1 @@
-default_app_config = 'workflow.apps.WorkflowConfig'
+# -*- coding: utf-8 -*-

@@ -1,6 +1,1 @@
-"""
-销售
-
-"""
-default_app_config = "sale.apps.MyAppConfig"
-
+# -*- coding: utf-8 -*-
